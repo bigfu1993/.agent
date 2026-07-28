@@ -1,0 +1,46 @@
+﻿# Whitelist mode: ignore everything by default.
+*
+
+# Git metadata for this config repository.
+!.gitignore
+
+# Portable Codex configuration.
+!AGENTS.md
+!config.toml
+
+# Personal rules.
+!rules/
+!rules/**
+
+# Personal skills. System-provided skills are machine-managed and should stay local.
+!skills/
+!skills/**
+skills/.system/
+
+# Local auth, identity, sandbox, runtime state, logs, sessions, caches, and generated artifacts.
+.codex-global-state.json*
+.personality_migration
+.sandbox*/
+auth.json
+cap_sid
+installation_id
+models_cache.json
+session_index.jsonl
+goals_*.sqlite*
+logs_*.sqlite*
+memories_*.sqlite*
+state_*.sqlite*
+ambient-suggestions/
+cache/
+computer-use/
+generated_images/
+node_repl/
+pets/
+plugins/
+process_manager/
+sessions/
+sqlite/
+tmp/
+.tmp/
+vendor_imports/
+visualizations/

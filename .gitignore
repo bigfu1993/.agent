@@ -23,6 +23,7 @@ skills/.system/
 .sandbox*/
 auth.json
 cap_sid
+config.toml
 installation_id
 models_cache.json
 session_index.jsonl

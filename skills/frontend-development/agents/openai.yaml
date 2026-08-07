@@ -1,0 +1,6 @@
+interface:
+  display_name: "Frontend Development"
+  short_description: "Frontend engineering, interaction, and QA standards"
+  default_prompt: "Use $frontend-development to build or refactor a frontend feature with the global engineering, UI, interaction, and QA standards."
+policy:
+  allow_implicit_invocation: true

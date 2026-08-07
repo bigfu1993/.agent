@@ -4,11 +4,20 @@
 
 ## 规则维护
 
-- 长期要求先判维度：全局写 `/Users/bigfu/.codex/AGENTS.md`，项目写对应仓库 `AGENTS.md` 或项目文档。
+- 长期要求先判维度：全局规则按运行环境写对应文件——Codex CLI 写 `/Users/bigfu/.codex/AGENTS.md`，Claude Code 写 `/Users/bigfu/.claude/CLAUDE.md`；项目写对应仓库 `AGENTS.md`/`CLAUDE.md` 或项目文档。
 - 总结、梳理、留存、复盘、归档必须先拆分全局/项目维度；混合内容分别写入并在回复中说明。
 - 全局维度：方法、偏好、安全、验证、工具。项目维度：业务、接口、目录、命令、产品、验收。
 - 规则必须可执行、可检查；新增或修改规则时，同步检查实现、文档和验证命令。
 - 不把一次性状态、业务细节、流程图细节、接口细节长期堆进全局规范。
+
+## 全局规则与 skill 同步工作流
+
+- `/Users/bigfu/.codex/AGENTS.md` 与 `/Users/bigfu/.claude/CLAUDE.md` 承载同一套跨项目方法论，只在工具能力差异处（可用工具、skill 根路径）分叉；每次更新 skill 文件或这两份全局规则文件中的任意一份前，先读取另一份，核对本次改动涉及的章节。
+- 合并原则：去重提炼总结（同一条规则不在两份文件里重复堆砌，合并成一份更精炼的表述）、差量合并（只处理本次变化涉及的章节，不做无关的大范围重写）。
+- 遇到真正冲突（两份文件对同一件事给出矛盾指令，而不是工具能力差异导致的正常分叉）时停下来问用户决策，不擅自二选一。
+- 合并完成后，两份全局规则文件在方法论层面应保持一致；`~/.claude/skills/` 与 `~/.codex/skills/` 下的个人 skill（`.system/` 目录除外，那是各工具自己机器管理的运行时 skill，不跨工具同步）也应保持内容一致。
+- skill 文件、`AGENTS.md`、`CLAUDE.md` 更新完成后，在 `~/.claude` 和 `~/.codex` 两个仓库分别提交并推送到各自远端（`git@github.com:bigfu1993/.agent.git`、`git@github.com:bigfu1993/codex.git`）。
+- 推送完成后，分别在 `~/.codex` 和 `~/.claude` 两个目录执行一次 `git pull`，用 `git status` 确认两边都是 clean 且 up to date with origin，作为同步生效的验证方式。
 
 ## 上下文压缩复盘
 
@@ -154,7 +163,7 @@
 
 - 默认路径：`root/<skill目录>/SKILL.md`；带插件前缀的 skill 以映射目录为准，当前会话技能清单更新时同步维护本文。
 - `r1`：`imagegen`，`openai-docs`，`plugin-creator`，`skill-creator`，`skill-installer`。
-- `r0`：`animation-vocabulary`，`apple-design`，`emil-design-eng`，`find-animation-opportunities`，`frontend-development`，`improve-animations`，`pick-ui-library`，`review-animations`。
+- `r0`：`animation-vocabulary`，`apple-design`，`bigfu-working-style`，`emil-design-eng`，`find-animation-opportunities`，`frontend-development`，`improve-animations`，`pick-ui-library`，`review-animations`。
 - `r2`：`browser:control-in-app-browser` → `browser/26.727.40816/skills/control-in-app-browser`；`visualize:visualize` → `visualize/1.0.16/skills/visualize`。
 - `r3`：`sites:sites-building`，`sites:sites-hosting`。
 - `r4`：`build-ios-apps:` 下的 `ios-app-intents`，`ios-debugger-agent`，`ios-ettrace-performance`，`ios-memgraph-leaks`，`ios-simulator-browser`，`swiftui-liquid-glass`，`swiftui-performance-audit`，`swiftui-ui-patterns`，`swiftui-view-refactor`。

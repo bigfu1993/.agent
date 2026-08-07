@@ -6,6 +6,7 @@
 
 # Portable Codex configuration.
 !AGENTS.md
+!CLAUDE.md
 !config.toml
 
 # Personal rules.

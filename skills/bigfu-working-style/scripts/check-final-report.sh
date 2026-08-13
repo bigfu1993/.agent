@@ -24,6 +24,10 @@ Checks:
   - final response headings: 1. 执行结果 / 2. 阶段进度 / 3. 下一步建议
   - phase progress contains a percentage in section 2
   - section 3 does not mention push / 推送
+
+Environment:
+  BIGOS_FINAL_REPORT_STDIN_TIMEOUT  Seconds to wait for stdin when using "-".
+                                    Defaults to 5.
 EOF
 }
 
@@ -42,6 +46,7 @@ response_file=${2:-}
 tmp_response=""
 section_two=""
 section_three=""
+stdin_timeout_seconds=${BIGOS_FINAL_REPORT_STDIN_TIMEOUT:-5}
 
 cleanup() {
     [ -z "$tmp_response" ] || rm -f "$tmp_response"
@@ -54,6 +59,13 @@ if [ ! -d "$project_root" ]; then
     echo "ERR project-root not found: $project_root" >&2
     exit 1
 fi
+
+case "$stdin_timeout_seconds" in
+    "" | *[!0-9]*)
+        echo "ERR BIGOS_FINAL_REPORT_STDIN_TIMEOUT must be a non-negative integer" >&2
+        exit 2
+        ;;
+esac
 
 count_c_lines() {
     root=$1
@@ -111,7 +123,48 @@ fi
 
 if [ "$response_file" = "-" ]; then
     tmp_response=$(mktemp "${TMPDIR:-/tmp}/bigos-final-report.XXXXXX")
-    cat > "$tmp_response"
+    set +e
+    perl -e '
+        my ($timeout, $out) = @ARGV;
+        $SIG{ALRM} = sub { exit 124 };
+        alarm($timeout);
+        open(my $fh, ">", $out) or exit 1;
+        my $bytes = 0;
+        while (1) {
+            my $buf = "";
+            my $n = sysread(STDIN, $buf, 8192);
+            exit 1 unless defined $n;
+            last if $n == 0;
+            $bytes += $n;
+            print {$fh} $buf or exit 1;
+        }
+        close($fh) or exit 1;
+        exit($bytes == 0 ? 2 : 0);
+    ' "$stdin_timeout_seconds" "$tmp_response"
+    stdin_status=$?
+    set -e
+
+    case "$stdin_status" in
+        0)
+            ;;
+        2)
+            echo "ERR stdin response draft is empty" >&2
+            exit 1
+            ;;
+        124)
+            echo "ERR stdin response draft did not finish within ${stdin_timeout_seconds}s" >&2
+            exit 1
+            ;;
+        *)
+            echo "ERR failed to read stdin response draft" >&2
+            exit 1
+            ;;
+    esac
+
+    if [ ! -s "$tmp_response" ]; then
+        echo "ERR failed to read stdin response draft" >&2
+        exit 1
+    fi
     response_file=$tmp_response
 elif [ ! -f "$response_file" ]; then
     echo "ERR response draft not found: $response_file" >&2

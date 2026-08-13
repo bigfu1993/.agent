@@ -57,7 +57,8 @@ Codex CLI 侧用 `write_context`/`sync_push`/`sync_load` 等专属工具做上�
 
 - 踩坑了、做了架构决策、发现 API/工具特殊行为 → 写入当前项目的持久化 memory 目录（`~/.claude/projects/<project>/memory/`），单独一个文件一条事实，并更新该目录的 `MEMORY.md` 索引。
 - 跨项目通用、反复验证过的工作方式 → 更新全局 skill `~/.claude/skills/bigfu-working-style/SKILL.md`。
-- 没有 `/sync-save`、`/sync-load` 这类专属指令；用户要求同步/留存时，按上面两条规则直接写文件，不依赖额外工具。
+- 项目 memory 记录明显变多、或多条记忆之间存在值得显式表达的结构关系（依赖/因果/取代）时 → 按全局 skill `~/.claude/skills/knowledge-graph/SKILL.md` 的方法论在该项目 memory 目录维护 `GRAPH.md`；记录少、彼此没有强关联的项目不用主动建这份文件。
+- 没有 `/sync-save`、`/sync-load` 这类专属指令；用户要求同步/留存时，按上面几条规则直接写文件，不依赖额外工具。
 
 ## 安全策略
 
@@ -200,4 +201,4 @@ Codex CLI 侧用 `write_context`/`sync_push`/`sync_load` 等专属工具做上�
 ### Skill 文件映射
 
 - 默认路径：`root/<skill目录>/SKILL.md`。
-- `r0`：`animation-vocabulary`，`apple-design`，`bigfu-working-style`，`emil-design-eng`，`find-animation-opportunities`，`frontend-development`，`improve-animations`，`pick-ui-library`，`review-animations`。
+- `r0`：`animation-vocabulary`，`apple-design`，`bigfu-working-style`，`emil-design-eng`，`find-animation-opportunities`，`frontend-development`，`improve-animations`，`knowledge-graph`，`pick-ui-library`，`review-animations`。

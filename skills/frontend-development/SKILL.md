@@ -71,6 +71,8 @@ description: Global frontend engineering standard for Codex. Use for any fronten
 - 页面布局先定 owner：固定头、滚动主体、固定底部必须归属 `src/layouts` 中同一个 layout owner，并作为同级区域维护；外部按钮用稳定 `form` id 关联表单。
 - 表单排序按风险和频率：必填、高频、高风险字段靠前；选填补充信息按含义聚合；同组字段高度稳定。
 - 弹窗、侧拉和抽屉内的表单模块默认使用 small size 控件渲染：输入框、选择器、文本域、按钮、标签保持紧凑高度和小字号；需要大尺寸时必须有清晰业务理由，并同步检查桌面/移动视口不被撑开或截断。
+- 弹窗类组件的文件和文件夹命名优先使用业务对象、`Modal`、`Overlay`、`Sheet` 等稳定 owner 名称，不把 `Dialog` 作为长期文件/文件夹后缀；标准可访问性属性值如 `aria-haspopup="dialog"` 保持语义正确。
+- TSX/JSX 中每个 `div` 必须显式提供语义化 `className`；类名体现当前 owner 和元素角色，避免匿名 `div` 依赖父级或标签选择器，临时布局容器也要保留可检索类名。
 - 输入内辅助动作优先轻量文字/图标；全局消息由根注册单例，业务代码直接调消息工具。
 - 避免卡片套卡片；只在重复项、弹窗、明确工具面板中使用卡片。页面大区块优先用 full-width band、开放布局、列表、表格、轨道或画布。
 - 使用稳定尺寸约束：固定格式控件、工具栏、时间轴、棋盘/网格、按钮、指标块、媒体 frame 要有明确宽高、aspect-ratio、grid tracks 或 min/max，避免 hover/文本/动态内容导致跳动。

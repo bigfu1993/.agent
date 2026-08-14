@@ -1,0 +1,6 @@
+interface:
+  display_name: "Frontend Validation Optimization"
+  short_description: "Frontend validation, runtime QA, and code-quality optimization"
+  default_prompt: "Use $frontend-validation-optimization to validate frontend changes, inspect rendered UI, debug runtime behavior, or optimize React/TypeScript code quality."
+policy:
+  allow_implicit_invocation: true

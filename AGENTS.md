@@ -119,9 +119,10 @@
 
 ### 前端规范
 
-- 前端开发、重构、UI/交互和页面验证必须先使用全局 skill `/Users/bigfu/.codex/skills/frontend-development/SKILL.md`。
-- 全局 AGENTS 只保留入口规则；具体组件组织、状态归属、表单布局、响应式、本地运行进程管理、运行态验证和交付检查以 `frontend-development` skill 为准。
-- 若项目 `AGENTS.md`、设计系统或用户要求有更具体前端规则，先合并到当前任务约束，再按 `frontend-development` skill 执行。
+- 前端结构设计、页面/组件实现、UI/交互、状态归属和原型转代码必须先使用全局 skill `/Users/bigfu/.codex/skills/frontend-development/SKILL.md`。
+- 前端验证、运行态检查、响应式/截图检查、重构优化、props 收敛和冗余代码治理必须使用全局 skill `/Users/bigfu/.codex/skills/frontend-validation-optimization/SKILL.md`。
+- 全局 AGENTS 只保留入口规则；具体组件组织、状态归属、表单布局和 UI 实现以 `frontend-development` skill 为准，运行态验证、交付检查和优化治理以 `frontend-validation-optimization` skill 为准。
+- 若项目 `AGENTS.md`、设计系统或用户要求有更具体前端规则，先合并到当前任务约束，再按对应前端 skill 执行。
 
 ### 后端规范
 
@@ -133,13 +134,13 @@
 
 ### UI 与交互
 
-- UI 与交互细则已收敛到 `frontend-development` skill；涉及前端界面时按该 skill 的“UI 与交互标准”和“验证闭环”执行。
+- UI 与交互设计细则已收敛到 `frontend-development` skill；运行态验证、截图对照和交付检查按 `frontend-validation-optimization` skill 执行。
 - 非前端视觉文档和流程图仍按本文“文档规范/流程图与视觉文档”执行。
 
 ### 验证规则
 
 - 每次代码或产品功能修改后必须验证相关功能，静态检查不算结束。
-- 前端页面改动按 `frontend-development` skill 做本地单进程运行、可访问页面、核心交互、桌面/移动和 console/截图验证；接口改动至少验证健康检查和目标接口；前后端联动需闭环联调。
+- 前端页面改动按 `frontend-validation-optimization` skill 做本地单进程运行、可访问页面、核心交互、桌面/移动和 console/截图验证；接口改动至少验证健康检查和目标接口；前后端联动需闭环联调。
 - 先复用默认端口已有项目进程；同一项目本地运行时只保留一个前端服务进程；确需重启后端时主动重启并验证。
 - 不涉及后端代码、配置、迁移或运行依赖时，不重启后端。
 - 临时启动的额外进程验证后主动停止；不误停用户进程。
@@ -181,7 +182,7 @@
 
 ## Skill 使用映射
 
-- 工作优先匹配已有 skill；前端开发、React/Vue/页面/UI/交互/本地运行进程管理/运行态验证优先触发 `frontend-development` skill；匹配不到或 skill 不足时，再按系统浏览规则联网寻找权威方案。
+- 工作优先匹配已有 skill；前端开发、React/Vue/页面/UI/交互优先触发 `frontend-development` skill；前端运行态验证、截图检查、重构优化和质量治理优先触发 `frontend-validation-optimization` skill；匹配不到或 skill 不足时，再按系统浏览规则联网寻找权威方案。
 - 使用 skill 前完整阅读对应 `SKILL.md`；相对路径、脚本、模板、资源按 `SKILL.md` 所在目录解析。
 - 用户点名或任务明显匹配时必须用对应 skill；多 skill 取最小覆盖集合并说明顺序。
 - skill 缺失、失败或工具不可用时说明原因，用最接近方式继续。
@@ -208,7 +209,7 @@
 
 - 默认路径：`root/<skill目录>/SKILL.md`；带插件前缀的 skill 以映射目录为准，当前会话技能清单更新时同步维护本文。
 - `r1`：`imagegen`，`openai-docs`，`plugin-creator`，`skill-creator`，`skill-installer`。
-- `r0`：`animation-vocabulary`，`apple-design`，`bigfu-working-style`，`emil-design-eng`，`find-animation-opportunities`，`frontend-development`，`improve-animations`，`knowledge-graph`，`pick-ui-library`，`review-animations`。
+- `r0`：`animation-vocabulary`，`apple-design`，`bigfu-working-style`，`emil-design-eng`，`find-animation-opportunities`，`frontend-development`，`frontend-validation-optimization`，`improve-animations`，`knowledge-graph`，`pick-ui-library`，`review-animations`。
 - `r2`：`browser:control-in-app-browser` → `browser/26.727.40816/skills/control-in-app-browser`；`visualize:visualize` → `visualize/1.0.16/skills/visualize`。
 - `r3`：`sites:sites-building`，`sites:sites-hosting`。
 - `r4`：`build-ios-apps:` 下的 `ios-app-intents`，`ios-debugger-agent`，`ios-ettrace-performance`，`ios-memgraph-leaks`，`ios-simulator-browser`，`swiftui-liquid-glass`，`swiftui-performance-audit`，`swiftui-ui-patterns`，`swiftui-view-refactor`。

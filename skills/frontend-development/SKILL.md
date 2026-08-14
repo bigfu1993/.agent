@@ -1,6 +1,6 @@
 ---
 name: frontend-development
-description: Global frontend engineering standard for Codex. Use for any frontend application, dashboard, internal tool, website UI, React/Vue/Next/Vite code change, prototype-to-code implementation, component/state/form/layout styling, interaction behavior, responsive/mobile fix, and rendered runtime QA. It consolidates the user's global frontend and UI rules plus the UMI platform React implementation standard.
+description: Use when designing or implementing frontend applications, React/Vue/Next/Vite pages, components, routing, state ownership, UI structure, styling, forms, interactions, responsive behavior, or prototype-to-code work.
 ---
 
 # Frontend Development
@@ -88,20 +88,7 @@ description: Global frontend engineering standard for Codex. Use for any fronten
 - 对模拟媒体、图表、时间轴、热力图等可视模块，使用代码原生结构实现；交互控件、表单、表格、导航和状态反馈必须是可操作 UI，不要交付静态截图。
 - 原型若包含本地草稿、导出、撤销重做、筛选搜索、播放、拖拽、校验、复核等流程，应在实现中保留等价可验证行为，除非用户明确裁剪范围。
 
-## 验证闭环
+## 开发收口
 
-- 每次前端代码或产品功能修改后必须验证相关功能；静态检查不算结束。
-- 先跑项目已有静态命令：类型检查、lint、单测或构建。没有脚本时说明缺口，并选择最接近的替代检查。
-- 需要 dev server 才能运行的应用，同一个项目本地运行时只保留一个服务进程；启动前先用 `lsof`/端口访问/进程 cwd 确认是否已有同项目进程，能复用就复用，不能复用时先停止自己启动的旧进程或说明原因后再换端口。
-- 临时额外启动的同项目进程只允许用于短时验证，验证后必须主动停止；不要让同一项目同时长期占用多个端口。
-- 页面改动至少验证：页面可访问、不是空白、无框架错误覆盖、console 无相关 error/warn、核心交互有真实状态变化。
-- 视觉或布局改动至少做桌面和一个移动视口截图检查；检查溢出、遮挡、竖排、错位、滚动陷阱、不可读文本和 z-index 问题。
-- 参考驱动实现要做对照检查：布局比例、文案、颜色、密度、组件层级、交互状态和响应式表现；发现偏差先修再交付。
-- 导出、保存、提交、删除、复核、支付、发布等高风险动作要验证确认态、成功态、失败/校验态和数据结果。
-- Browser 插件可用时优先用 Browser 技能；不可用或连接失败时按前端测试技能降级到 Playwright，并在最终说明降级原因。
-
-## 交付说明
-
-- 最终回复用中文说明改了什么、验证了什么、还剩什么风险。
-- 说明关键文件、运行 URL、验证命令和核心交互路径；不要把命令输出原样倾倒给用户。
-- 无法运行态验证时，明确未检验项、阻塞原因和替代检查。
+- 开发实现完成后，使用 `frontend-validation-optimization` 做静态检查、运行态检查、视觉/交互验证、代码质量复盘和优化治理。
+- 若任务本身是验证、排错、重构优化、props 收敛、冗余代码治理或性能/质量检查，直接使用 `frontend-validation-optimization`。

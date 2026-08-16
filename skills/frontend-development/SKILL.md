@@ -41,6 +41,8 @@ description: Use when designing or implementing frontend applications, React/Vue
 - 文件名不要重复携带所在模块、父级目录或业务边界名；目录已经表达上下文，子文件只命名职责和角色，例如 `src/layouts/WorkbenchLayout/components/Sidebar.tsx`，避免 `WorkbenchSidebar.tsx`。
 - 组件分为业务组件和全局组件：业务组件放在引用文件同级 `components/` 下，并使用 `./components/Xxx` 引用；全局组件放在 `src/components/` 下，并使用 `@/components/Xxx` 引用。
 - 抽取组件前先判定长期 owner：页面私有组件归对应 page 的 `components/`，layout 强绑定壳层归对应 layout 的 `components/`，跨业务复用组件归 `src/components/`；router 只放路由、权限、重定向和 route wrapper 装配，不作为视觉业务组件 owner。
+- 判定 owner 不能只看组件当前物理位置：用 `rg`/`Grep` 搜实际 import 方，若全部调用方都落在某个页面/layout 子树内，即使文件当前放在 `src/components/`，也要按真实调用范围收回该页面/layout；反之若要把组件移进某页面私有目录，先确认它现有的调用方是否都在该页面子树内，会不会形成"全局组件反向依赖某页面私有路径"，会的话先跟用户确认处理方案，不擅自移动。
+- 一个模块内部随内容增多需要拆成多文件时，只有真正渲染 UI 的组件文件才进该模块的 `components/` 子目录；`model.ts`、类型、常量等纯逻辑支撑文件放模块根目录，不因为"也是被组件消费"就混进 `components/`。
 - 页面私有组件/hook 放模块内；全局 hook、类型、纯工具放项目约定目录或共享包。
 - HTTP 请求模块统一维护在 `src/api/`：Axios/request 实例、拦截器、错误解析、API domain 方法和后端接口适配放在 `src/api`，业务页面通过 `@/api/...` 调用；`src/utils` 不承载请求实例或接口调用封装。
 - Vite 本地代理服务默认将 `server.host` 配置为 `0.0.0.0`，保证 `127.0.0.1`、`localhost` 和本机局域网地址都能访问同一 dev server；新增或调整 `server.proxy` 时必须在 `configure` 中记录代理请求、响应状态和错误日志，便于确认接口是否真实转发到目标服务。
@@ -51,6 +53,7 @@ description: Use when designing or implementing frontend applications, React/Vue
 ## React 与状态
 
 - 状态靠近真实消费方；跨页面或跨模块状态用 Provider/Context/store，不要页面层重复透传。
+- 列表卡片/行的弹窗、开关态是否要提升到列表层，用"是否需要跨兄弟实例只保留一份"判断，不是"看起来像列表级功能"就默认提升：单实例、无需跨行协调的弹窗和 mutation 下沉到卡片自己内部；只有真正需要全列表共享唯一一份的（如同一个确认弹窗被任意一行触发）才留在列表层。
 - 页面管业务编排，组件管展示与自身交互；无语义、无复用、无独立状态的外壳及时合并或抽成通用容器。
 - 组件 props 以 owner 契约为准：父级传真实源值、稳定 domain 对象/集合、必要状态和动作回调；不要为了展示方便在入口文件维护 `xxxCount`、格式化文案、布尔中间态等无语义中间变量再逐层传递。
 - 列表、筛选和排序组件优先接收源集合与必要外部选中态/回调；能由源集合稳定派生的选项、摘要、数量、标签和禁用态收敛在组件内部。若选中态会影响父级过滤结果、路由、请求参数或跨组件协作，则状态与变更回调仍由父级持有。

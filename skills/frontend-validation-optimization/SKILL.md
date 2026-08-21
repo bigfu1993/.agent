@@ -57,7 +57,7 @@ description: Use when validating frontend changes, testing rendered UI, debuggin
 ## Provider 边界验证
 
 - 检查所属领域的 `provider.tsx`：私有 Context、Provider 与对应消费 hook 应在同一文件，领域内不得残留仅为拆分而存在的并列 `context.ts` 或 `provider/` 目录；独立 reducer/model 等支撑文件必须能说明自己的单一职责。
-- 用 `rg` 检查全部消费者统一从 Provider 文件导入；Context 实例、setter、查询对象和内部状态不得导出，自动导入声明中的符号不能作为越过文件边界的理由。
+- 用 `rg` 检查全部消费者统一从 Provider 文件导入；Context 实例、setter、查询对象和内部状态不得导出。合并或删除 Context 文件后必须单独检查自动导入声明不再引用旧路径；生成器的 append 模式会保留失效声明时，应改为可清理旧项的覆盖生成，不手改生成文件。
 - 运行 typecheck 与 lint，确认 Context 类型、Provider 覆盖范围和消费 hook 均有效；若 `react-refresh/only-export-components` 对 Provider 文件设有例外，检查例外仅覆盖 Provider 命名文件且没有全局关闭。消费 hook 在 Provider 外调用必须明确失败，不能静默返回空实现。
 - 结构验证通过后仍要运行包含真实 Provider 的入口，覆盖至少一个消费者读取和一次关键动作；可接受 Provider 编辑触发开发时模块完整刷新，但页面不得出现挂载失败、状态残留或 console error。
 

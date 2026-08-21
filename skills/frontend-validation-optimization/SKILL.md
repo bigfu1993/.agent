@@ -54,6 +54,16 @@ description: Use when validating frontend changes, testing rendered UI, debuggin
 - 不要把父级路由、条件渲染、React Query 失效、API payload 归属、业务流程编排移动进子组件。
 - `className`、`variant`、`children`、slot 和 render props 是共享组件的合理扩展点；不要因为当前只有一个调用点就硬删。
 
+## 全局浮层迁移验证
+
+- 先验证 Provider 覆盖范围：所有触发入口与全局 Host 都必须位于对应 Provider 内；Context hook 在 Provider 外调用应有明确错误，不能静默返回空实现。
+- 检查订阅边界：触发入口只消费稳定 Actions Context，不订阅草稿、查询结果或提交状态；Host 数据 Context 的变化不应导致底部导航、快捷按钮或列表卡片无意义重渲染。
+- 检查最小契约：用 `rg` 搜打开/关闭回调、setter 和 Props，确认调用方只传 ID 或必要命令；删除根组件和中间组件中的一跳 handler、完整业务对象传递及庞大聚合 props。
+- 检查单一状态源：迁移后搜索旧布尔开关、旧 controller/hook/组合组件、本地补丁列表和重复 mutation；服务端数据必须由查询缓存、失效或可回滚的乐观更新闭环。
+- 为 lane 替换、按类型关闭、批量关闭、草稿确认到表单等关键转换补 reducer/state-machine 测试；至少覆盖同 lane 互斥、跨 lane 不误关和关闭后无残留状态。
+- 删除或移动旧模块后，检查显式 import、JSX、类型文件和 auto-import 生成声明；带 `@ts-nocheck` 的声明文件必须单独搜索旧路径，不能用 `tsc` 通过替代。
+- 运行态重复请求根组件、Provider、Host 和触发入口的完整导入链；浏览器可用时真实验证打开、关闭、切换、成功、失败和路由/会话清理，浏览器不可用时说明降级验证没有覆盖 UI 交互。
+
 ## 共享组件插槽化与批量迁移
 
 给共享组件新增能力（插槽、可选 prop）并把散落在多个调用方的重复手写结构收敛进去时：

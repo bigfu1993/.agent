@@ -56,10 +56,10 @@ description: Use when validating frontend changes, testing rendered UI, debuggin
 
 ## Provider 边界验证
 
-- 检查领域根目录与 `provider/`：Provider 已拆成多文件时，Context、消费 hook、reducer/model 应收敛在 Provider 模块，领域根目录不得再残留并列的旧 `context.ts`、`provider.tsx` 或第二状态源。
-- 用 `rg` 检查全部消费者只从 `provider/index.ts` 对应的公共路径导入；不得深层导入 Context 或组件实现。公共入口默认不导出 Context 实例、setter、查询对象和内部状态，自动导入声明中的符号不能作为越过模块边界的理由。
-- 运行 typecheck 与 lint，确认 Context 类型、Provider 覆盖范围和消费 hook 均有效，且没有 `react-refresh/only-export-components` 警告或规则豁免；消费 hook 在 Provider 外调用必须明确失败，不能静默返回空实现。
-- 结构验证通过后仍要运行包含真实 Provider 的入口，覆盖至少一个消费者读取和一次关键动作；目录调整不能只凭 import 编译通过判定完成。
+- 检查所属领域的 `provider.tsx`：私有 Context、Provider 与对应消费 hook 应在同一文件，领域内不得残留仅为拆分而存在的并列 `context.ts` 或 `provider/` 目录；独立 reducer/model 等支撑文件必须能说明自己的单一职责。
+- 用 `rg` 检查全部消费者统一从 Provider 文件导入；Context 实例、setter、查询对象和内部状态不得导出，自动导入声明中的符号不能作为越过文件边界的理由。
+- 运行 typecheck 与 lint，确认 Context 类型、Provider 覆盖范围和消费 hook 均有效；若 `react-refresh/only-export-components` 对 Provider 文件设有例外，检查例外仅覆盖 Provider 命名文件且没有全局关闭。消费 hook 在 Provider 外调用必须明确失败，不能静默返回空实现。
+- 结构验证通过后仍要运行包含真实 Provider 的入口，覆盖至少一个消费者读取和一次关键动作；可接受 Provider 编辑触发开发时模块完整刷新，但页面不得出现挂载失败、状态残留或 console error。
 
 ## 全局浮层迁移验证
 

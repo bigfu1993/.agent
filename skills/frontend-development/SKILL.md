@@ -69,13 +69,14 @@ description: Use when designing or implementing frontend applications, React/Vue
 - 定时器、监听器、浏览器对象和临时 URL 必须清理；涉及 `localStorage` 时加稳定 key 和容错解析。
 - 大型交互要有可检查状态：选中态、禁用态、草稿态、保存态、校验态、空态、错误态和成功反馈都要真实响应。
 
-### Provider 模块边界
+### Provider 文件边界
 
-- 当领域 Provider 已包含 Context、消费 hook、reducer/model 或多组状态时，将其收敛为所属领域内独立的 `provider/` 模块；不得让 `context.ts`、`provider.tsx` 与领域入口长期平铺并列，形成边界不清的半模块结构。
-- `provider/index.ts` 是外部唯一公共入口，默认只导出 Provider 组件和面向消费者的 hook；Context 实例、内部 state/setter、reducer、Host 数据和装配细节保持私有。业务调用方不得深层导入 `provider/context`、`provider/Provider` 等内部文件；自动导入生成声明不等于公开 API。
-- 按运行职责拆文件：`Provider.tsx` 只导出 React 组件，`context.ts` 维护 Context 与消费 hook，reducer/model 按职责独立，`index.ts` 只组合公开契约。不要在组件文件混导非组件常量或 hook，也不要用关闭 `react-refresh/only-export-components` 代替正确拆分。
-- Provider 只接收应用边界无法自行获得的最小依赖，领域查询、mutation、流程状态和派生动作收敛在模块内部；不得把 Provider 包装成庞大 props 转发层，也不得与页面、本地 hook 或其他 Context 并行维护同一份状态。
+- Provider、其私有 Context 与对应消费 hook 默认属于同一项完整能力，应收敛在所属领域的单个 `provider.tsx` 中；不得只为形式分类新增 `provider/` 目录，或把 Context/hook 拆成与 Provider 并列的 `context.ts`。
+- Context 实例保持文件私有，`provider.tsx` 对外只导出 Provider 组件和完成消费所需的 hook；业务调用方统一从该 Provider 文件导入，不得直接获得 Context、内部 state/setter、查询对象或装配细节。
+- reducer、state machine、model 或查询编排只有在具备独立职责、可单独测试或被多处复用时才拆文件；Provider 真正演变为包含多个独立功能的子模块后才建立目录，不能把“每个标识符一个文件”当作拆分理由。
+- Provider 只接收应用边界无法自行获得的最小依赖，领域查询、mutation、流程状态和派生动作收敛在文件内部；不得把 Provider 包装成庞大 props 转发层，也不得与页面、本地 hook 或其他 Context 并行维护同一份状态。
 - Context 按订阅边界拆分，而不是按文件数量拆分；只有更新频率、消费方或权限边界明显不同的数据/命令才使用独立 Context。公开命令保持稳定引用，value 在能减少无关消费者更新时保持稳定身份。
+- Provider 文件同时导出 Provider 与对应消费 hook 是单文件内聚的明确例外；不得仅为消除 Fast Refresh 边界提示拆文件。项目若启用 `react-refresh/only-export-components`，豁免必须精确限定到 Provider 文件，禁止全局关闭规则。
 
 ### 全局浮层与跨组件命令
 

@@ -75,6 +75,7 @@ description: Use when designing or implementing frontend applications, React/Vue
 - Context 实例保持文件私有，`provider.tsx` 对外只导出 Provider 组件和完成消费所需的 hook；业务调用方统一从该 Provider 文件导入，不得直接获得 Context、内部 state/setter、查询对象或装配细节。
 - reducer、state machine、model 或查询编排只有在具备独立职责、可单独测试或被多处复用时才拆文件；Provider 真正演变为包含多个独立功能的子模块后才建立目录，不能把“每个标识符一个文件”当作拆分理由。
 - Provider 只接收应用边界无法自行获得的最小依赖，领域查询、mutation、流程状态和派生动作收敛在文件内部；不得把 Provider 包装成庞大 props 转发层，也不得与页面、本地 hook 或其他 Context 并行维护同一份状态。
+- 常见反例：把这些查询/mutation/回调/effect 编排整体拆进一个单独文件（例如 `runtime.ts`/`logic.ts`），再让 `provider.tsx` 反向 `import` 该文件导出的 hook 使用——命名不叫 `context`/`reducer` 不代表可以绕开"收敛在文件内部"的要求，发现这类文件时直接把内容合并回 `provider.tsx` 并删除该文件。
 - Context 按订阅边界拆分，而不是按文件数量拆分；只有更新频率、消费方或权限边界明显不同的数据/命令才使用独立 Context。公开命令保持稳定引用，value 在能减少无关消费者更新时保持稳定身份。
 - Provider 文件同时导出 Provider 与对应消费 hook 是单文件内聚的明确例外；不得仅为消除 Fast Refresh 边界提示拆文件。项目若启用 `react-refresh/only-export-components`，豁免必须精确限定到 Provider 文件，禁止全局关闭规则。
 

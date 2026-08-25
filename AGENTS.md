@@ -192,6 +192,7 @@
 - 用户点名或任务明显匹配时必须用对应 skill；多 skill 取最小覆盖集合并说明顺序。
 - skill 缺失、失败或工具不可用时说明原因，用最接近方式继续。
 - 工作中发现 skill 缺步骤、顺序、验证或检查清单时，优先逐步更新 skill；无法归入 skill 再写全局/项目规则。
+- `Humanizer-zh`（编辑/审阅中文文本、去除 AI 生成痕迹）目前只存在于 Claude Code 的 `~/.claude/skills/`，是带独立 git 远程的第三方 vendored skill，未复制到本目录，Codex CLI 环境不可用，不要假设它存在。
 
 ### Skill Root 映射
 

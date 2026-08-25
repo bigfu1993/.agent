@@ -187,7 +187,7 @@
 
 ## Skill 使用映射
 
-- 工作优先匹配已有 skill；前端开发、React/Vue/页面/UI/交互优先触发 `frontend-development` skill；前端运行态验证、截图检查、重构优化和质量治理优先触发 `frontend-validation-optimization` skill；匹配不到或 skill 不足时，再按系统浏览规则联网寻找权威方案。
+- 工作优先匹配已有 skill；案例分析、技术复盘、优化总结、汇报稿和数据支撑型演讲文档优先触发 `write-case-study-reports` skill；前端开发、React/Vue/页面/UI/交互优先触发 `frontend-development` skill；前端运行态验证、截图检查、重构优化和质量治理优先触发 `frontend-validation-optimization` skill；匹配不到或 skill 不足时，再按系统浏览规则联网寻找权威方案。
 - 使用 skill 前完整阅读对应 `SKILL.md`；相对路径、脚本、模板、资源按 `SKILL.md` 所在目录解析。
 - 用户点名或任务明显匹配时必须用对应 skill；多 skill 取最小覆盖集合并说明顺序。
 - skill 缺失、失败或工具不可用时说明原因，用最接近方式继续。
@@ -214,7 +214,7 @@
 
 - 默认路径：`root/<skill目录>/SKILL.md`；带插件前缀的 skill 以映射目录为准，当前会话技能清单更新时同步维护本文。
 - `r1`：`imagegen`，`openai-docs`，`plugin-creator`，`skill-creator`，`skill-installer`。
-- `r0`：`animation-vocabulary`，`apple-design`，`bigfu-working-style`，`emil-design-eng`，`find-animation-opportunities`，`frontend-development`，`frontend-validation-optimization`，`improve-animations`，`knowledge-graph`，`pick-ui-library`，`review-animations`。
+- `r0`：`animation-vocabulary`，`apple-design`，`bigfu-working-style`，`emil-design-eng`，`find-animation-opportunities`，`frontend-development`，`frontend-validation-optimization`，`improve-animations`，`knowledge-graph`，`pick-ui-library`，`review-animations`，`write-case-study-reports`。
 - `r2`：`browser:control-in-app-browser` → `browser/26.727.40816/skills/control-in-app-browser`；`visualize:visualize` → `visualize/1.0.16/skills/visualize`。
 - `r3`：`sites:sites-building`，`sites:sites-hosting`。
 - `r4`：`build-ios-apps:` 下的 `ios-app-intents`，`ios-debugger-agent`，`ios-ettrace-performance`，`ios-memgraph-leaks`，`ios-simulator-browser`，`swiftui-liquid-glass`，`swiftui-performance-audit`，`swiftui-ui-patterns`，`swiftui-view-refactor`。

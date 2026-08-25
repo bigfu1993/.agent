@@ -1,0 +1,4 @@
+interface:
+  display_name: "Case Study Report Writing"
+  short_description: "Evidence-led case studies and presentation-ready reports"
+  default_prompt: "Use $write-case-study-reports to turn technical evidence into an accurate, independently readable case study or presentation report."

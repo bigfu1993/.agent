@@ -208,4 +208,4 @@ Codex CLI 侧用 `write_context`/`sync_push`/`sync_load` 等专属工具做上�
 ### Skill 文件映射
 
 - 默认路径：`root/<skill目录>/SKILL.md`。
-- `r0`：`animation-vocabulary`，`apple-design`，`bigfu-working-style`，`emil-design-eng`，`find-animation-opportunities`，`frontend-development`，`frontend-validation-optimization`，`Humanizer-zh`，`improve-animations`，`knowledge-graph`，`pick-ui-library`，`review-animations`，`write-case-study-reports`。`Humanizer-zh` 是带独立 git 远程的第三方 vendored skill，不参与个人 skill 的跨工具内容同步。
+- `r0`：`animation-vocabulary`，`apple-design`，`bigfu-working-style`，`emil-design-eng`，`find-animation-opportunities`，`frontend-development`，`frontend-validation-optimization`，`Humanizer-zh`，`improve-animations`，`knowledge-graph`，`pick-ui-library`，`review-animations`，`write-case-study-reports`。`Humanizer-zh` 原为第三方 vendored skill（上游 `github.com/op7418/Humanizer-zh`），已剥离其独立 git 历史、作为普通内容并入本仓库，随个人 skill 正常跨工具同步；后续如需追更上游，需手动比对合并，不再自动 `git pull` 上游。

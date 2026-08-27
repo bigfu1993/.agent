@@ -69,6 +69,14 @@ description: Use when designing or implementing frontend applications, React/Vue
 - 定时器、监听器、浏览器对象和临时 URL 必须清理；涉及 `localStorage` 时加稳定 key 和容错解析。
 - 大型交互要有可检查状态：选中态、禁用态、草稿态、保存态、校验态、空态、错误态和成功反馈都要真实响应。
 
+### Props 命名一致性
+
+- 同一业务数据直接经过 props、Context 字段、hook options/返回值或中间组件继续透传时，数据源字段、Prop 名、解构形参、返回字段和下一层 Prop 必须保持同名；禁止用解构别名、对象重映射或一跳变量把 `plannedDates` 改成 `periodDates` 这类无转换别名。
+- 中间组件只负责转发时，要么保持原名继续传递，要么删除这层传参并让真实消费方直接读取稳定对象/Context；不能为迎合中间组件局部措辞重新命名同一份数据。
+- 只有外部接口、持久化 schema 或通用组件 owner 契约确实不同，且发生了结构、类型、单位、粒度或业务语义转换时，才允许在单一边界适配点改名；适配结果按目标契约命名，后续链路继续保持同名，并用类型、注释或测试说明转换依据。
+- 通用组件可保留自己的稳定契约（如 `value`、`items`、`isConfirming`）；调用方把具体领域值映射到该契约属于组件边界适配，但不得再通过若干中间组件反复改名。
+- 重命名字段或 Prop 时，必须从真实数据源追到最终消费方，同步修改类型、Provider/Context、hook、组件定义、全部调用点和测试，不能只修当前报错位置。
+
 ### Provider 文件边界
 
 - Provider、其私有 Context 与对应消费 hook 默认属于同一项完整能力，应收敛在所属领域的单个 `provider.tsx` 中；不得只为形式分类新增 `provider/` 目录，或把 Context/hook 拆成与 Provider 并列的 `context.ts`。

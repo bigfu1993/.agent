@@ -62,6 +62,12 @@ description: Use when validating frontend changes, testing rendered UI, debuggin
 - 不要把父级路由、条件渲染、React Query 失效、API payload 归属、业务流程编排移动进子组件。
 - `className`、`variant`、`children`、slot 和 render props 是共享组件的合理扩展点；不要因为当前只有一个调用点就硬删。
 
+### Props 同名检查
+
+- 修改字段、Provider、hook 或组件 Props 后，从真实数据源到最终消费方逐层核对名称；直接透传链中的数据源字段、Prop、解构形参、hook 返回字段和下一层 Prop 必须同名，重点排查 `propA={source.propB}`、解构 `propA: propB`、返回对象 `propA: propB` 和只为改名存在的一跳变量。
+- 名称不同只作为候选，不自动判错；人工确认是否跨越外部契约或通用组件 owner 边界，以及是否发生结构、类型、单位、粒度或业务语义转换。没有真实转换就统一名称，有真实转换则只保留一个适配点并检查后续链路重新同名。
+- 收尾时用 `rg` 搜旧名、别名和组件定义/调用点，运行 typecheck、lint 和相关契约测试；测试至少固定公开 hook/Context/组件契约中的关键字段，并确认旧别名不再暴露。
+
 ## Provider 边界验证
 
 - 检查所属领域的 `provider.tsx`：私有 Context、Provider 与对应消费 hook 应在同一文件，领域内不得残留仅为拆分而存在的并列 `context.ts` 或 `provider/` 目录；独立 reducer/model 等支撑文件必须能说明自己的单一职责。

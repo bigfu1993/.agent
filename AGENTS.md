@@ -125,6 +125,7 @@
 
 - 前端结构设计、页面/组件实现、UI/交互、状态归属和原型转代码必须先使用全局 skill `/Users/bigfu/.codex/skills/frontend-development/SKILL.md`。
 - 前端验证、运行态检查、响应式/截图检查、重构优化、props 收敛和冗余代码治理必须使用全局 skill `/Users/bigfu/.codex/skills/frontend-validation-optimization/SKILL.md`。
+- 同一业务数据沿 props、Context、hook 入参/返回值或组件组合链路直接透传时必须保持字段、Prop 和形参同名；具体适配例外按 `frontend-development` skill 的“Props 命名一致性”执行，并按 `frontend-validation-optimization` skill 的同名检查收口。
 - 全局弹窗、抽屉、跨页面流程状态或跨层命令的新增/重构，必须按 `frontend-development` skill 的“全局浮层与跨组件命令”分层，并按 `frontend-validation-optimization` skill 的“全局浮层迁移验证”检查旧链路、状态机和运行态。
 - 全局 AGENTS 只保留入口规则；具体组件组织、状态归属、表单布局和 UI 实现以 `frontend-development` skill 为准，运行态验证、交付检查和优化治理以 `frontend-validation-optimization` skill 为准。
 - 若项目 `AGENTS.md`、设计系统或用户要求有更具体前端规则，先合并到当前任务约束，再按对应前端 skill 执行。

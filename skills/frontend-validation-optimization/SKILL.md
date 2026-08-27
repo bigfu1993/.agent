@@ -38,12 +38,20 @@ description: Use when validating frontend changes, testing rendered UI, debuggin
 - 单次使用且直读同样清晰的 `Boolean(x)`、`!!x`。
 - `rawX -> x.filter(...)` 这类无意义中间变量；需要类型收窄时用显式 type guard。
 - 只为下一句 `if` 服务的临时 validation/result 变量，前提是内联后失败路径仍清晰。
+- 同一函数内多个条件分支（`if`/三元/`&&`）各自完整返回、且外层包着**同一个标签 + 同一个 className** 的 wrapper：改成先按分支算出内部该渲染的内容，最后只包一次外层 wrapper。命中条件必须是"同一函数内、多个互斥分支各自独立返回同一 wrapper"，不能包括：`.map()` 循环内的重复（本来就该重复）、同一层级并列渲染的多个 sibling 区块（不是互斥分支）、以及分布在不同函数/组件里的同名 className（各自独立维护，不算重复）。
 
 必须保留：
 
 - 命名业务规则、权限、流程状态、用户可见条件的变量。
 - 多处用于 JSX、依赖数组、className、payload 构造或昂贵计算缓存的变量。
 - 保留 mutation 前快照、避免旧闭包、缩窄 TypeScript 类型或稳定对象/函数身份的变量。
+
+重复 wrapper 收敛的常见反例：
+
+- `renderTrialCandidateCardActions` 类函数：多个 `if` 分支各自 `return (<div className="...">...</div>)`，收敛成先算内部内容（三元链或变量）、最后 `return content ? <div className="...">{content}</div> : null`。
+- 三元两个分支都包一层同样的 wrapper 但内部字段数量不同：收敛成一层 wrapper，内部按条件多渲染/少渲染某个子节点，不用两份完整 wrapper。
+- 两个分支内部结构差异很大（不同字段、不同操作区）时不必强行合并内部子结构，只需把外层 wrapper 提出来包一次，内部两段各自保留为清晰的 `<>...</>` 分支，避免为了"消灭重复"把两种本就不同的布局强行拆碎交织。
+- 三段式分支（如"报错态 / 真实列表 / 空态"）中报错态和空态共用同一个 wrapper，真实列表走 `.map()` 完全不同：把报错态和空态合并成一个分支（如 `error || list.length === 0`）后再包一次 wrapper，`.map()` 分支保持独立，不要为了对齐三个分支的形状而改动列表渲染逻辑。
 
 ## Props 与回调
 
@@ -89,6 +97,12 @@ rg -n "const (raw[A-Z]|has[A-Z]|is[A-Z]|can[A-Z]|show[A-Z]|should[A-Z]|current[A
 rg -n "const .* = Boolean\(|const .* = !!|const .* = [A-Za-z0-9_?.]+;" src
 rg -n "interface [A-Za-z0-9]+Props|type [A-Za-z0-9]+Props|function [A-Z][A-Za-z0-9]+\(" src
 rg -n "on[A-Z][A-Za-z0-9]+=\{\(.*\) =>|[A-Za-z0-9]+=\"[^\"]+\"|[A-Za-z0-9]+=\{(true|false|0)\}" src
+```
+
+排查"同一函数内多分支重复 wrapper"时，先按**同一文件内**找同一个 className 字符串出现 ≥2 次的候选（跨文件的同名 className 是正常复用，不算），再人工确认是否命中（排除 `.map()` 循环、并列 sibling）：
+
+```bash
+rg -o 'className="[^"]{12,}"' -n -g '*.tsx' src | awk -F: '{key=$1"\t"$3; count[key]++} END {for (k in count) if (count[k]>1) print count[k], k}' | sort -rn
 ```
 
 ## 交付说明

@@ -106,7 +106,7 @@ description: Use when creating, restructuring, reviewing, or converting technica
 - 图表放在引入段落之后、解读段落之前，并紧跟编号图注。不把全部图堆在文档开头，也不集中挪到文末。
 - 同一文档中的图使用稳定画布、字号、色彩语义、留白和图注格式。数据记录、图表标签和正文数字必须一致。
 - SVG 图表补齐 `<title>`、`<desc>`、`role="img"` 和稳定 `viewBox`；修改后做 XML 解析与整图渲染检查。
-- 对应 skill 可用时组合使用：图表设计使用 `data-visualization`，DOCX 使用 `documents`，PPT/PPTX 使用 `Presentations`。当前运行环境没有这些 skill 时，使用现有工具完成等价生成和视觉验证，不假设插件必然存在。
+- 对应 skill 可用时组合使用：图表设计使用 `data-visualization`，DOCX 使用 `convert-markdown-to-docx`，PPT/PPTX 使用 `Presentations`。当前运行环境没有这些 skill 时，使用现有工具完成等价生成和视觉验证，不假设插件必然存在。
 
 ### 按内容性质排版
 

@@ -128,6 +128,7 @@
 - 同一业务数据沿 props、Context、hook 入参/返回值或组件组合链路直接透传时必须保持字段、Prop 和形参同名；具体适配例外按 `frontend-development` skill 的“Props 命名一致性”执行，并按 `frontend-validation-optimization` skill 的同名检查收口。
 - 全局弹窗、抽屉、跨页面流程状态或跨层命令的新增/重构，必须按 `frontend-development` skill 的“全局浮层与跨组件命令”分层，并按 `frontend-validation-optimization` skill 的“全局浮层迁移验证”检查旧链路、状态机和运行态。
 - 轨道、进度条、分段选择器、滑块等由容器、选中填充、拖拽点和状态描边共同组成的控件，必须按 `frontend-development` skill 的“复合控件几何一致性”统一形状与盒模型，并按 `frontend-validation-optimization` skill 覆盖空值、短值、普通值、边界值和状态切换验证。
+- 指标行、图表行、内容卡行等上下相邻的多行栅格，必须按 `frontend-development` skill 的“多行栅格的列节奏一致性”共用同一套列节奏、同行等高、脚注沉底，并按 `frontend-validation-optimization` skill 的“栅格对齐检查”整页核对纵向缝与底边。
 - 全局 AGENTS 只保留入口规则；具体组件组织、状态归属、表单布局和 UI 实现以 `frontend-development` skill 为准，运行态验证、交付检查和优化治理以 `frontend-validation-optimization` skill 为准。
 - 若项目 `AGENTS.md`、设计系统或用户要求有更具体前端规则，先合并到当前任务约束，再按对应前端 skill 执行。
 

@@ -97,6 +97,22 @@ description: Use when validating frontend changes, testing rendered UI, debuggin
 5. 大批量迁移收尾时，除了对改动文件跑 eslint，必须再跑一次整项目级别的 lint/typecheck；部分文件是显式 `import` 依赖而非走项目 auto-import，只有全量 lint 才能抓出这类文件里迁移后残留的未使用 import。
 6. 全部迁移完成后做一次全仓库回归搜索：确认旧模式没有遗漏，同时人工甄别命中结果里是不是同名但语义不同的误报（比如同一个类名在别处是完全无关的用途），不能看到匹配就当成漏改。
 
+## 栅格对齐检查
+
+页面级排版缺陷（列缝对不上、卡片底边参差、指标基线错开）**单看一个组件永远发现不了**，必须整页一起看。按 `frontend-development` 的「多行栅格的列节奏一致性」实现后，逐项核对：
+
+- 同一页面内所有 `grid-template-columns` 是否同源；出现两套以上不同的 `fr` 比例即为可疑
+- 同一行的卡片是否等高；是否有非预期的 `align-items: start`
+- 一行内各卡片的尾部元素（脚注、图例、操作区）是否都沉底
+- 结构相同的指标卡是否每一行都有 `min-height` 占位
+
+```bash
+rg -n "grid-template-columns" src | sort -t: -k3 | uniq -c -f2 | sort -rn
+rg -n "align-items:\s*(start|flex-start)" src
+```
+
+截图核对时**看整页而不是看单卡**：把浏览器窗口调到目标宽度截一张全页图，用直尺思路检查纵向缝是否在同一条 x 上、同一行卡片底边是否齐平。只截单个卡片的局部图无法暴露这类问题。
+
 ## 常用扫描
 
 ```bash

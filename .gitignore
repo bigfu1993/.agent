@@ -17,6 +17,7 @@
 !skills/
 !skills/**
 skills/.system/
+skills/synced/
 
 # Local auth, identity, sandbox, runtime state, logs, sessions, caches, and generated artifacts.
 .codex-global-state.json*

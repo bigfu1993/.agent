@@ -5,3 +5,4 @@ prefix_rule(pattern=["C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell
 prefix_rule(pattern=["C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe", "-Command", "Get-ChildItem -LiteralPath 'C:\\Users\\Administrator\\Desktop' -Force -ErrorAction SilentlyContinue | Select-Object Name,FullName,Length,LastWriteTime"], decision="allow")
 prefix_rule(pattern=["C:\\Windows\\System32\\WindowsPowerShell\\v1.0\\powershell.exe", "-Command", "Get-ChildItem -Path 'C:\\Users\\Administrator' -Recurse -File -Filter '*SignalR*' -ErrorAction SilentlyContinue | Select-Object -First 80 FullName,Length,LastWriteTime"], decision="allow")
 prefix_rule(pattern=["npm", "install"], decision="allow")
+prefix_rule(pattern=["node", "./.tmp-exhibition-browser-check.mjs"], decision="allow")

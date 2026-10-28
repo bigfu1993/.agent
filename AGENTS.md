@@ -141,6 +141,9 @@
 - 全局弹窗、抽屉、跨页面流程状态或跨层命令的新增/重构，必须按 `frontend-development` skill 的“全局浮层与跨组件命令”分层，并按 `frontend-validation-optimization` skill 的“全局浮层迁移验证”检查旧链路、状态机和运行态。
 - 轨道、进度条、分段选择器、滑块等由容器、选中填充、拖拽点和状态描边共同组成的控件，必须按 `frontend-development` skill 的“复合控件几何一致性”统一形状与盒模型，并按 `frontend-validation-optimization` skill 覆盖空值、短值、普通值、边界值和状态切换验证。
 - 指标行、图表行、内容卡行等上下相邻的多行栅格，必须按 `frontend-development` skill 的“多行栅格的列节奏一致性”共用同一套列节奏、同行等高、脚注沉底，并按 `frontend-validation-optimization` skill 的“栅格对齐检查”整页核对纵向缝与底边。
+- 页面间距必须区分外部关系和内部留白：同级元素之间的间隔由同级 `margin` 统一管理；父级 `flex/grid` 已使用 `gap` 时，`gap` 是唯一同级间隔 owner，不再叠加子元素 `margin`。父容器与直接子节点四周的留白由父级 `padding` 管理，子节点不得用 `margin` 模拟父级 `padding`，同一边不得重复叠加。
+- 同行元素与文字默认使用 `flex` 和 `align-items: center` 做中线对齐；数值与小字号单位等不同字号文本使用 `baseline`；表头与数据列必须共享同一对齐边，数值列默认右对齐到末位。不得用无语义的 `margin`、`padding` 或 `translate` 拼凑文字对齐。
+- 用户要求按设计稿、截图或原型 `1:1` 还原时，设计稿是验收规格；布局比例、间距、字号、字重、颜色、边框/分割线、素材清晰度、动画、交互和状态都必须在目标视口逐项对照。只复用用户明确允许的技术实现层，不得据此改写视觉表现；仍有可见差异时不得宣称还原完成。
 - 全局 AGENTS 只保留入口规则；具体组件组织、状态归属、表单布局和 UI 实现以 `frontend-development` skill 为准，运行态验证、交付检查和优化治理以 `frontend-validation-optimization` skill 为准。
 - 若项目 `AGENTS.md`、设计系统或用户要求有更具体前端规则，先合并到当前任务约束，再按对应前端 skill 执行。
 

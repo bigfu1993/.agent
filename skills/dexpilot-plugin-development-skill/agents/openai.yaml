@@ -1,4 +1,0 @@
-interface:
-  display_name: "DexPilot 插件开发"
-  short_description: "开发 F20/F80/F60 Desktop 设备插件"
-  default_prompt: "使用 DexPilot 插件开发 Skill，按当前 Plugin SDK、visualization 和型号数据契约实现或评审设备插件。"

@@ -1,0 +1,25 @@
+# 仅为源清单示例，身份和 Adapter 必须替换为目标设备已确认的值。
+id: ai.example.device.demo
+display_name: 示例设备
+vendor: Example
+device_kind: sensor
+version: 0.1.0-test.1
+compatibility:
+  desktop_api: ">=1.0,<2.0"
+  plugin_api: ">=2.0,<3.0"
+  backend_api: ">=1.0,<2.0"
+components:
+  - id: exhibit
+    type: frontend.page
+    slot: exhibit
+    entry: index.html
+    adapters: [example_adapter]
+    config:
+      scope: adapter
+      compatible_component_versions: ">=0.1.0 <1.0.0"
+    workers: []
+    permissions:
+      states: [device.info]
+      streams: []
+      commands: []
+      files: []

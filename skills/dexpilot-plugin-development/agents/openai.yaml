@@ -1,0 +1,4 @@
+interface:
+  display_name: "DexPilot 前端设备插件工程"
+  short_description: "从零建插件或迁移 Vue 项目，规划架构、私有依赖、SDK 接入与 CI 发布"
+  default_prompt: "使用 $dexpilot-plugin-development，依据目标设备契约规划并实现前端插件，覆盖本地开发、私有 npm 依赖、SDK 与 visualization 接入及 CI。"

@@ -1,4 +1,12 @@
-# F20/F80/F60 数据处理规则
+# 设备数据处理与触觉示例
+
+## 新型号先定义自己的数据契约
+
+本章 F20/F80/F60 是既有实现示例，不是所有设备的通用协议。接新型号先明确资源名、绑定实例、kind/subkind、二进制或文本、帧头边界、端序、尺寸/通道、单位、坐标系、无效值、时间戳单位、序号来源、丢帧策略与 geometry profile。图像、wrench、点云分别解码；模型支持集采用 registry 精确值。
+
+流目录可能包含多实例多通道。根据宿主上下文与获准 `streams` 目录明确选择实例、kind、subkind，每一路端口独立 ACK 和 release。不得把二进制图像/wrench 文本套入六通道 Float32，也不能用 SN 拼接流路由。
+
+将已知设备原始数据转换成插件内部 canonical frame，再供页面消费；该结构由当前插件维护，不新增公共包。保留原始物理指标和用于显示的位移/颜色，避免显示增强改变测量值。
 
 ## 状态快照
 
@@ -91,7 +99,7 @@ F60 真实几何 profile 以 Manifest 为准。当前 `640x480` profile 的矩�
 
 ## Worker、租约和背压
 
-Worker 初始化时接收模型快照和显示配置；收到 stream port 后解析帧，校验 layout，输出 canonical frame。主线程收到结果后创建 lease：
+Worker 初始化时接收模型快照和显示配置；收到 stream port 后解析帧，校验 layout，输出 canonical frame。解码前限制头部长度、尺寸和总字节数；JSON 换行后的 payload 未必满足 4 字节对齐，应使用 DataView 或对齐缓冲，不直接对任意 byteOffset 构造 Float32Array。主线程收到结果后创建 lease：
 
 ```ts
 const lease = createFrameResultLease(frame, recycleBuffers);
@@ -100,14 +108,18 @@ mailbox.publish(lease);
 lease.release();
 ```
 
+`createFrameResultLease`、mailbox、`FramePipelineCoordinator`、`ResolutionGate` 是既有插件内部实现名称，不是 SDK/visualization 的公开导出。新插件按需要在自己的模块内实现有界缓冲和状态门控，或复用当前项目已有实现，不从另一插件跨仓导入。
+
 F20/F80 使用固定结果缓冲池和 `FramePipelineCoordinator`；F60 使用 canonical frame 校验、结果缓冲池和 render mailbox。规则是：
 
 - 结果缓冲耗尽时最多暂存一个最新输入。
 - mailbox 只保留少量 pending frame，旧帧释放 lease。
-- ACK 表示 Worker 已接收/转交，不表示页面已经渲染。
+- 最简单可靠的 ACK 时机是本帧处理完成或明确丢弃后的 finally。若提前 ACK，必须先把帧接管进有严格容量和淘汰回收策略的内部队列；不能只是启动异步处理就无界确认。ACK 不表示已经渲染，也不表示已录制落盘。
 - 页面提交新帧后释放上一帧；渲染中断也必须释放。
 - `pause`、`system-suspend`、设备切换和 Worker 销毁时清空 pending 与 lease。
-- 不使用 `setInterval` 逐帧拉取，不把帧数组放入 Vue ref/reactive，不复制到 `window.postMessage`。
+- 不使用 `setInterval` 逐帧拉取，不把帧数组放入 Vue 深度 ref/reactive，不经普通 window 消息克隆大数组。主线程只发布低频指标或使用 shallowRef/markRaw 包装显示句柄。
+
+transfer 后发送方 buffer 会 detached，记录每个缓冲的 owner；帧被覆盖、拒绝、渲染异常、设备切换、Worker 初始化失败/崩溃都要回收租约。停止 Worker 前释放宿主 stream，端口连接超时或 opened/error 到达时只操作当前代次。
 
 ## 分辨率和错帧
 

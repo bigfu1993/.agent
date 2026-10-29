@@ -1,0 +1,63 @@
+# 适配 references/ci-release.md 的命令契约后作为 .gitlab-ci.yml 使用。
+# 镜像/Runner 为已核验项目的示例，接入目标 GitLab 时确认可用性。
+workflow:
+  rules:
+    - if: '$CI_PIPELINE_SOURCE == "merge_request_event"'
+    - if: '$CI_COMMIT_BRANCH && $CI_OPEN_MERGE_REQUESTS'
+      when: never
+    - if: '$CI_COMMIT_BRANCH || $CI_COMMIT_TAG'
+
+stages: [build, publish]
+
+variables:
+  PLUGIN_CI_IMAGE: dockerhub.yimu.info/library/node:22-bookworm
+  PLUGIN_RUNNER_TAG: 220runner
+  DEXPILOT_RELEASE_BUILD: "1"
+
+.plugin_job:
+  image: "$PLUGIN_CI_IMAGE"
+  tags: ["$PLUGIN_RUNNER_TAG"]
+
+build_plugin:
+  extends: .plugin_job
+  stage: build
+  interruptible: true
+  before_script:
+    # 可选的 GitLab 文件变量；文件含只读 npm 认证，不打印其内容。
+    - if [ -n "${NPM_READ_CONFIG:-}" ]; then export NPM_CONFIG_USERCONFIG="$NPM_READ_CONFIG"; fi
+    - npm install --global --prefix "$CI_PROJECT_DIR/.ci-tools" pnpm@11.5.1 --registry=https://repository.yimu.info/repository/npm-group/
+    - export PATH="$CI_PROJECT_DIR/.ci-tools/bin:$PATH"
+    - pnpm install --frozen-lockfile --store-dir .pnpm-store
+  cache:
+    key:
+      files: [pnpm-lock.yaml]
+    paths: [.pnpm-store/]
+  script:
+    - pnpm typecheck
+    - pnpm test
+    # pack:modules 内部只执行一次生产构建；不要再从本地 dist-dev 打包。
+    - pnpm pack:modules
+    - pnpm publish:artifacts --dry-run
+  artifacts:
+    paths: [module-artifacts/registry/, module-artifacts/registry-artifacts.json]
+    expire_in: 14 days
+
+publish_plugin:
+  extends: .plugin_job
+  stage: publish
+  interruptible: false
+  resource_group: "$CI_PROJECT_PATH_SLUG-frontend"
+  needs:
+    - job: build_plugin
+      artifacts: true
+  script:
+    # 此脚本只使用 Node 内置模块，不安装依赖、不重新构建。
+    - node scripts/release/publish-artifacts.mjs
+  rules:
+    - if: '$CI_COMMIT_TAG =~ /^(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)\.(0|[1-9][0-9]*)(-test\.(0|[1-9][0-9]*))?$/'
+      when: on_success
+    - when: never
+  artifacts:
+    when: always
+    paths: [artifacts/publish-result.json]
+    expire_in: 30 days

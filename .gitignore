@@ -16,6 +16,7 @@
 # Personal skills. System-provided skills are machine-managed and should stay local.
 !skills/
 !skills/**
+skills/**/.DS_Store
 skills/.system/
 skills/synced/
 

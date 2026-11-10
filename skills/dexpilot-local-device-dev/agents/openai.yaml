@@ -1,0 +1,4 @@
+interface:
+  display_name: "DexPilot 本地设备联调"
+  short_description: "启动 Desktop 与 Host，装配指定型号的前端、Adapter、设备 SDK 并验证运行"
+  default_prompt: "使用 $dexpilot-local-device-dev，为选定型号准备本地前端、Adapter 和设备 SDK，校验并安装到开发库，启动 Desktop 与 dexpilot 后验证联调和退出。"

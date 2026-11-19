@@ -56,6 +56,12 @@
 - 模块开发完成时，`下一步建议` 必须增加独立的“全量验证”有序选项，说明验证范围和当前尚未验证项目；用户选择该序号后，按短指令直接执行全量验证。
 - 普通项目任务中，`push` 不再作为默认"下一步建议"；可以在"阶段进度/尚未完成"里如实说明"尚未推送"，但不要建议用户下一步 push。只有用户明确要求 push，或任务本身就是远端同步、发布、部署、全局配置同步工作流时，才执行或提及 push 动作。
 
+## 项目索引（AOCI-CODE）
+
+- 用户要求“生成项目索引”或“建立项目索引”时，默认用 AOCI 为当前项目建索引。先确认项目根目录和 Git 根目录（若有）；当前工作区包含多个项目或目标不明确时，先询问目标绝对路径，不对多项目父目录操作。
+- 使用 `/Users/bigfu/.local/bin/aoci --repo <项目根目录绝对路径>`。首次接入时运行 `init --locale zh-CN --agent claude`；在 `scan` 前核对 `aoci.txt`、`aoci.meta.txt`、`aoci.code.txt`、`AGENTS.md` 未被 `.gitignore` 或 `.git/info/exclude` 忽略，保留 `init` 写入的宿主配置忽略项，然后运行 `scan`。已接入时先核对 MCP 指向和现有基线，按 AOCI Guide 接续，不盲目重置受管范围。
+- 新 MCP 尚未加载时提示重启 Agent，待新会话确认服务端指向当前项目后，按项目 AOCI Rules 和实时 Guide 建立或维护索引，最后运行 `verify`、`check`。索引资产归属目标项目，不写入 `aoci` 安装目录。
+
 ## 跨会话状态留存（Claude Code 侧的 Context Sync 等效机制）
 
 Codex CLI 侧用 `write_context`/`sync_push`/`sync_load` 等专属工具做上下文同步；Claude Code 环境没有这几个工具，等效能力改用以下机制：
